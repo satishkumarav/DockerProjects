@@ -1,4 +1,5 @@
 version: '2.2'
+# Docker Compose for launch two node ElasticSearch 6.5.4 with Kibana
 services:
   elasticsearch:
     image: 'docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4'
@@ -12,8 +13,7 @@ services:
         soft: -1
         hard: -1
     volumes:
-      - 'esdata1:/usr/share/elasticsearch/data'
-      - './elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml'
+      - 'esdata1:/usr/share/elasticsearch/data'   
     ports:
       - '9200:9200'
     networks:
@@ -32,24 +32,6 @@ services:
         hard: -1
     volumes:
       - 'esdata2:/usr/share/elasticsearch/data'
-      - './elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml'
-    networks:
-      - esnet
-  elasticsearch3:
-    image: 'docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4'
-    container_name: elasticsearch3
-    environment:
-      - cluster.name=atlantis-dl-cluster
-      - bootstrap.memory_lock=true
-      - ES_JAVA_OPTS=-Xms512m -Xmx512m
-      - discovery.zen.ping.unicast.hosts=elasticsearch
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-    volumes:
-      - 'esdata3:/usr/share/elasticsearch/data'
-      - './elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml'
     networks:
       - esnet
   kibana1:
@@ -69,12 +51,11 @@ services:
       - esnet
     depends_on:
       - elasticsearch
+      - elasticsearch2
 volumes:
   esdata1:
     driver: local
   esdata2:
     driver: local
-  esdata3:
-    driver: local
 networks:
-  esnet: null
+  esnet:

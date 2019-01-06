@@ -1,1 +1,6 @@
-network.host: 0.0.0.0
+ cluster.routing.allocation.disk.threshold_enabled: false
+# This value is depended on the number of es nodes. currently it is configured for 3 nodes
+# Number of master nodes = (Total Number of Nodes/2) + 1, This is required for correct resolution of master node in the quroum and 
+# Split brain
+# for 3 nodes, value (3/2)+1=2 
+# discovery.zen.minimum_master_nodes: 2 
